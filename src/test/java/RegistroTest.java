@@ -1,17 +1,19 @@
-import org.example.desafio.Registros;
+import org.example.desafio.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,7 +34,7 @@ public class RegistroTest {
         verify(registros).cadastrarVendedor(nome,email,cpf);
     }
     @Test
-    public void deveLancarUmaExecaoQuandoONomeForInvalido(){
+    public void deveLancarUmaExecaoQuandoONomeDoVendedorForInvalido(){
         //Criando cenario de teste
         String nome="an3a";
         String email="ana@nunes";
@@ -40,10 +42,10 @@ public class RegistroTest {
         //Realizando ação de teste
         //Comparando os resultados
       var response= Assertions.assertThrows(IllegalArgumentException.class,()-> registros.cadastrarVendedor(nome,email,cpf));
-      Assertions.assertEquals("Valor informado não é uma string, digite seu nome com uma String valida e sem espaço!",response.getMessage());
+      assertEquals("Valor informado não é uma string, digite seu nome com uma String valida e sem espaço!",response.getMessage());
     }
     @Test
-    public void deveLancarUmaExecaoQuandoOEmailForInvalido(){
+    public void deveLancarUmaExecaoQuandoOEmailDoVendedorForInvalido(){
         //Criando cenario de teste
         String nome="ana";
         String email="ananunes";
@@ -51,7 +53,7 @@ public class RegistroTest {
         //Realizando ação de teste
         //Comparando os resultados
         var response= Assertions.assertThrows(IllegalArgumentException.class,()-> registros.cadastrarVendedor(nome,email,cpf));
-        Assertions.assertEquals("O email precisa conter o @",response.getMessage());
+        assertEquals("O email precisa conter o @",response.getMessage());
     }
     @Test
     public void deveLancarUmaExecaoQuandoOEmailJaEstiverCadastradoParaOutroVendedor(){
@@ -62,7 +64,7 @@ public class RegistroTest {
         //Realizando ação de teste
         //Comparando os resultados
         var response= Assertions.assertThrows(IllegalArgumentException.class,()-> registros.cadastrarVendedor(nome,email,cpf));
-        Assertions.assertEquals("E-mail já cadastrados para outro vendedor!",response.getMessage());
+        assertEquals("E-mail já cadastrados para outro vendedor!",response.getMessage());
     }
     @Test
     public void deveLancarUmaExecaoQuandoOCpfJaEstiverCadastradoParaOutroVendedor(){
@@ -73,7 +75,7 @@ public class RegistroTest {
         //Realizando ação de teste
         //Comparando os resultados
         var response= Assertions.assertThrows(IllegalArgumentException.class,()-> registros.cadastrarVendedor(nome,email,cpf));
-        Assertions.assertEquals("CPF já cadastrados para outro vendedor!",response.getMessage());
+        assertEquals("CPF já cadastrados para outro vendedor!",response.getMessage());
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -98,7 +100,7 @@ public class RegistroTest {
         //Realizando ação de teste
         //Comparando os resultados
         var response= Assertions.assertThrows(IllegalArgumentException.class,()-> registros.cadastrarCliente(nome,email,cpf));
-        Assertions.assertEquals("Valor informado não é uma string, digite seu nome com uma String valida e sem espaço!",response.getMessage());
+        assertEquals("Valor informado não é uma string, digite seu nome com uma String valida e sem espaço!",response.getMessage());
     }
     @Test
     public void deveLancarUmaExecaoQuandoOEmailDoClienteForInvalido(){
@@ -109,7 +111,7 @@ public class RegistroTest {
         //Realizando ação de teste
         //Comparando os resultados
         var response= Assertions.assertThrows(IllegalArgumentException.class,()-> registros.cadastrarCliente(nome,email,cpf));
-        Assertions.assertEquals("O email precisa conter o @",response.getMessage());
+        assertEquals("O email precisa conter o @",response.getMessage());
     }
     @Test
     public void deveLancarUmaExecaoQuandoOEmailJaEstiverCadastradoParaOutroCliente(){
@@ -120,7 +122,7 @@ public class RegistroTest {
         //Realizando ação de teste
         //Comparando os resultados
         var response= Assertions.assertThrows(IllegalArgumentException.class,()-> registros.cadastrarCliente(nome,email,cpf));
-        Assertions.assertEquals("E-mail já cadastrados para outro cliente!",response.getMessage());
+        assertEquals("E-mail já cadastrados para outro cliente!",response.getMessage());
     }
     @Test
     public void deveLancarUmaExecaoQuandoOCpfJaEstiverCadastradoParaOutroCliente(){
@@ -131,7 +133,7 @@ public class RegistroTest {
         //Realizando ação de teste
         //Comparando os resultados
         var response= Assertions.assertThrows(IllegalArgumentException.class,()-> registros.cadastrarCliente(nome,email,cpf));
-        Assertions.assertEquals("CPF já cadastrados para outro Cliente!",response.getMessage());
+        assertEquals("CPF já cadastrados para outro Cliente!",response.getMessage());
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -158,7 +160,7 @@ public class RegistroTest {
         //Realizando ação de teste
         //Comparando os resultados
         var response= Assertions.assertThrows(IllegalArgumentException.class,()-> registros.cadastrarProdutos(cpfVendedor,cpfCliente,codigoProduto,quantidadeProduto));
-        Assertions.assertEquals("Vendedor não cadastrado!",response.getMessage());
+        assertEquals("Vendedor não cadastrado!",response.getMessage());
     }
     @Test
     public void deveLancarUmaExecaoQuandoOClienteNaoForCadastrado(){
@@ -170,7 +172,7 @@ public class RegistroTest {
         //Realizando ação de teste
         //Comparando os resultados
         var response= Assertions.assertThrows(IllegalArgumentException.class,()-> registros.cadastrarProdutos(cpfVendedor,cpfCliente,codigoProduto,quantidadeProduto));
-        Assertions.assertEquals("Cliente não cadastrado!",response.getMessage());
+        assertEquals("Cliente não cadastrado!",response.getMessage());
     }
     @Test
     public void deveLancarUmaExecaoQuandoOCodigoDoProdutoNaoEstiverCadastrado(){
@@ -182,7 +184,7 @@ public class RegistroTest {
         //Realizando ação de teste
         //Comparando os resultados
         var response= Assertions.assertThrows(IllegalArgumentException.class,()-> registros.cadastrarProdutos(cpfVendedor,cpfCliente,codigoProduto,quantidadeProduto));
-        Assertions.assertEquals("Codigo não encontrado",response.getMessage());
+        assertEquals("Codigo não encontrado",response.getMessage());
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -204,7 +206,7 @@ public class RegistroTest {
         //Realizando ação de teste
         //Comparando os resultados
         var response= Assertions.assertThrows(IllegalArgumentException.class,()-> registros.pesquisarComprasPorCliente(cpfCliente));
-        Assertions.assertEquals("Cliente não encontrado!",response.getMessage());
+        assertEquals("Cliente não encontrado!",response.getMessage());
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -219,13 +221,18 @@ public class RegistroTest {
         verify(registros).pesquisarVendasPorVendedor(cpfVendedor);
     }
     @Test
-    public void deveLancarUmaExecaoQuandoOEmailDoVendedorNãoForEncontrado(){
+    public void deveLancarUmaExecaoQuandoOCpfDoVendedorNãoForEncontrado(){
 
         int cpfVendedor=78901;
 
         //Realizando ação de teste
         //Comparando os resultados
         var response= Assertions.assertThrows(IllegalArgumentException.class,()-> registros.pesquisarVendasPorVendedor(cpfVendedor));
-        Assertions.assertEquals("Vendedor não encontrado!",response.getMessage());
+        assertEquals("Vendedor não encontrado!",response.getMessage());
     }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //teste do metodo listar vendedor
+    
+
 }
