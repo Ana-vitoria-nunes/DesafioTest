@@ -11,7 +11,7 @@ public class Registros {
     private Map<Integer, Vendedor> vendedores;
     private Map<Integer, Cliente> clientes;
 
-    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    BCryptPasswordEncoder escoder = new BCryptPasswordEncoder();
     Scanner scanner = new Scanner(System.in);
 
     public Registros() {
@@ -53,7 +53,7 @@ public class Registros {
                 throw new IllegalArgumentException("CPF já cadastrados para outro vendedor!");
             } else {
 
-                String senhaCriptografada = passwordEncoder.encode(senha);
+                String senhaCriptografada = escoder.encode(senha);
                 vendedores.put(numero, new Vendedor(email, nome, numero, senhaCriptografada));
                 System.out.println("Vendedor cadastrado com sucesso!");
             }
@@ -91,8 +91,8 @@ public class Registros {
             if (clientes.containsKey(numero)) {
                 throw new IllegalArgumentException("CPF já cadastrados para outro Cliente!");
             } else {
-                String senhaCriptografada = passwordEncoder.encode(senha);
-                clientes.put(numero, new Cliente(emailC, nomeC, numero, senhaCriptografada));
+                String senhaCriptografadaCliente = escoder.encode(senha);
+                clientes.put(numero, new Cliente(emailC, nomeC, numero, senhaCriptografadaCliente));
                 System.out.println("Cliente cadastrado com sucesso!");
             }
 
@@ -161,7 +161,7 @@ public class Registros {
             boolean encontrado = false;
             for (Vendedor senhas : vendedores.values()) {
                 // Comparar a senha criptografada com a senha informada
-                if (passwordEncoder.matches(senha, senhas.getSenha())) {
+                if (escoder.matches(senha, senhas.getSenha())) {
                     encontrado = true;
                     break;
                 }
@@ -217,18 +217,18 @@ public class Registros {
 
     }
 
-    public void logarComoCliente(int cpfPV, String senhaC) {
+    public void logarComoCliente(int cpfPC, String senhaC) {
         clientes.put(333, new Cliente("Ricardo@", "Ricardo", 333, "ricardo123"));
 
         try {
-            if (!clientes.containsKey(cpfPV)) {
+            if (!clientes.containsKey(cpfPC)) {
                 throw new IllegalArgumentException("Cpf invalido");
             }
 
             boolean encontrado = false;
             for (Cliente senha : clientes.values()) {
                 // Comparar a senha criptografada com a senha informada
-                if (passwordEncoder.matches(senhaC, senha.getSenha())) {
+                if (escoder.matches(senhaC, senha.getSenha())) {
                     encontrado = true;
                     break;
                 }
@@ -358,7 +358,7 @@ public class Registros {
         vendedores.put(456,new Vendedor("Luis@carlos","Luis",456,"luis123"));
 
         for (Vendedor vendedor : vendedores.values()) {
-            String senhaCriptografada = passwordEncoder.encode(vendedor.getSenha());
+            String senhaCriptografada = escoder.encode(vendedor.getSenha());
             vendedor.setSenha(senhaCriptografada);
         }
         if (vendedores.isEmpty()) {
@@ -381,10 +381,11 @@ public class Registros {
         clientes.put(333,new Cliente("Ricardo@","Ricardo",333,"ricardo123"));
         clientes.put(111,new Cliente("Daniel@","Daniel",111,"danie123"));
         clientes.put(222,new Cliente("Rubia@","Rubia",222,"rubia123"));
-        for (Cliente cliente : clientes.values()) {
-            String senhaCriptografada = passwordEncoder.encode(cliente.getSenha());
-            cliente.setSenha(senhaCriptografada);
-        }
+
+//        for (Cliente cliente : clientes.values()) {
+//            String senhaCriptografada = escoder.encode(cliente.getSenha());
+//            cliente.setSenha(senhaCriptografada);
+//        }
 
         if (clientes.isEmpty()) {
             System.out.println("Nenhum cliente cadastrado.");
